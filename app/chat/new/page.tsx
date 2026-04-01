@@ -78,6 +78,8 @@ export default function NewChatPage() {
       }
 
       // Create new conversation
+      console.log('[v0] Creating conversation:', { isGroup, groupName, created_by: currentUser.id })
+      
       const { data: newConv, error: convError } = await supabase
         .from('conversations')
         .insert({
@@ -88,7 +90,10 @@ export default function NewChatPage() {
         .select()
         .single()
 
+      console.log('[v0] Conversation result:', { newConv, convError })
+
       if (convError || !newConv) {
+        console.error('[v0] Conversation error:', convError)
         throw new Error('Failed to create conversation')
       }
 
@@ -98,11 +103,16 @@ export default function NewChatPage() {
         user_id: userId,
       }))
 
+      console.log('[v0] Adding members:', members)
+
       const { error: membersError } = await supabase
         .from('conversation_members')
         .insert(members)
 
+      console.log('[v0] Members result:', { membersError })
+
       if (membersError) {
+        console.error('[v0] Members error:', membersError)
         throw new Error('Failed to add members')
       }
 
