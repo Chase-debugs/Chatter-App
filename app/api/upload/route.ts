@@ -41,14 +41,17 @@ export async function POST(request: NextRequest) {
     const extension = file.name.split('.').pop()
     const filename = `${user.id}/${timestamp}.${extension}`
 
-    // Upload to Vercel Blob (private storage)
+    // Upload to Vercel Blob (public storage)
+    console.log('[v0] Uploading file:', { filename, type: file.type, size: file.size })
+    
     const blob = await put(filename, file, {
-      access: 'public', // Using public for simplicity - images need to be viewable
+      access: 'public',
     })
 
+    console.log('[v0] Upload success:', blob.url)
     return NextResponse.json({ url: blob.url })
   } catch (error) {
-    console.error('Upload error:', error)
+    console.error('[v0] Upload error:', error)
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
   }
 }
