@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getImageUrl } from '@/lib/image-url'
 
 interface MessageListProps {
   messages: (Message & { sender: Profile })[]
@@ -112,10 +113,13 @@ export function MessageList({
               {message.image_url && (
                 <div className="mt-1">
                   <img
-                    src={message.image_url}
+                    src={getImageUrl(message.image_url) || ''}
                     alt="Attached image"
                     className="max-w-md max-h-80 rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => window.open(message.image_url!, '_blank')}
+                    onClick={() => {
+                      const url = getImageUrl(message.image_url)
+                      if (url) window.open(url, '_blank')
+                    }}
                   />
                 </div>
               )}

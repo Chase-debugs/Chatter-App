@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Settings, Camera, Loader2, Check, User } from 'lucide-react'
+import { getImageUrl } from '@/lib/image-url'
 
 export default function SettingsPage() {
   const { currentUser } = useChatContext()
@@ -42,11 +43,14 @@ export default function SettingsPage() {
       })
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('[v0] Upload failed:', response.status, errorData)
         throw new Error('Upload failed')
       }
 
       const data = await response.json()
-      setAvatarUrl(data.url)
+      // Store the pathname for private blobs
+      setAvatarUrl(data.pathname)
       setMessage({ type: 'success', text: 'Avatar uploaded! Click Save to apply changes.' })
     } catch (error) {
       console.error('Upload error:', error)

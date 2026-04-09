@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
+import { getImageUrl } from '@/lib/image-url'
 import { Users } from 'lucide-react'
 
 interface UserAvatarProps {
@@ -45,7 +46,7 @@ export function UserAvatar({
     <div className={cn('relative', className)}>
       <Avatar className={cn(sizeClasses[size], 'border-2 border-background')}>
         {src ? (
-          <AvatarImage src={src} alt={fallback} />
+          <AvatarImage src={getImageUrl(src) || ''} alt={fallback} />
         ) : null}
         <AvatarFallback className={cn(
           'bg-primary text-primary-foreground font-medium',

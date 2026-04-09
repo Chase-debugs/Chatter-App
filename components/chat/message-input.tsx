@@ -56,13 +56,16 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
       })
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('[v0] Upload failed:', response.status, errorData)
         throw new Error('Upload failed')
       }
 
       const data = await response.json()
-      return data.url
+      // Return the pathname - will be converted to full URL when displaying
+      return data.pathname
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('[v0] Upload error:', error)
       return null
     } finally {
       setUploading(false)
